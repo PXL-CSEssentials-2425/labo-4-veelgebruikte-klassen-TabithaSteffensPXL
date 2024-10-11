@@ -115,11 +115,11 @@ namespace PasswordMeter
                 {
 
                     char randomLetter = (char)rng.Next('a', 'z' + 1);
-                    suggestedPassword.Append(randomLetter.ToString());
+                    suggestedPassword.Append(randomLetter);
                 }
-                for (int j = 0; j < 2; j++)
+                for (int j = 0; j < 5; j++)
                 {
-                    int randomNumbers = rng.Next(0, 10);
+                    int randomNumbers = rng.Next(0, 9);
                     suggestedPassword.Append(randomNumbers);
                 }
                 for (int k = 0; k < 2; k++)
@@ -128,19 +128,16 @@ namespace PasswordMeter
                     suggestedPassword.Append(randomCapitalLetter);
                 }
                 int amountExcitement = rng.Next(1, 6);
-                do 
-                { 
+                do
+                {
                     suggestedPassword.Append("!");
                     amountExcitement--;
 
                 } while (amountExcitement > 1);
 
                 string shownPassword = suggestedPassword.ToString();
-                string shuffle = shownPassword.Substring(0, (rng.Next(0, shownPassword.Length)));
-                shownPassword.Insert(0, shuffle);
-
-                MessageBoxResult answer = MessageBox.Show($"Use suggested password? {shownPassword}", "Weak Password", MessageBoxButton.YesNo);
-                if (answer == MessageBoxResult.Yes)
+                MessageBoxResult result = MessageBox.Show($"\t Use suggested password? \r\n \t {shownPassword}", "Weak Password", MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.Yes);
+                if (result == MessageBoxResult.Yes)
                 {
                     passwordTextBox.Text = shownPassword;
                 }
