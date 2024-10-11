@@ -32,7 +32,123 @@ namespace PasswordMeter
 
         private void passwordMeterButton_Click(object sender, RoutedEventArgs e)
         {
+            string username = userNameTextBox.Text.Trim();
+            string password = passwordTextBox.Text.Trim();
+            int passwordStrength = 0;
+            if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
+            {
+                resultTextBlock.Text = "Please enter a username or a password.";
+                return;
+            }
+            if (!password.Contains(username))
+            {
+                passwordStrength++;
+            }
+            if (password.Length >= 10)
+            {
+                passwordStrength++;
+            }
+            bool hasDigit = false;
+            bool hasUpper = false;
+            bool hasLower = false;
+            foreach (char c in password.ToCharArray())
+            {
+                if (char.IsDigit(c))
+                {
+                    hasDigit = true;
 
+                }
+                if (char.IsUpper(c))
+                {
+                    hasUpper = true;
+                }
+                if (char.IsLower(c))
+                {
+                    hasLower = true;
+                }
+            }
+            if (hasDigit)
+            {
+                passwordStrength++;
+            }
+            if (hasUpper)
+            {
+                passwordStrength++;
+            }
+            if (hasLower)
+            {
+                passwordStrength++;
+            }
+
+            //if (passwordStrength == 5)
+            //{
+            //    resultTextBlock.Text = "Strong Password";
+            //} else if (passwordStrength == 4)
+            //{
+            //    resultTextBlock.Text = "Ok Password";
+            //} else
+            //{
+            //    resultTextBlock.Text = "Weak Password";
+            //}
+
+            switch (passwordStrength)
+            {
+                case 5:
+                    resultTextBlock.Text = "Strong Password.";
+                    resultTextBlock.Foreground = Brushes.Green;
+                    break;
+                case 4:
+                    resultTextBlock.Text = "Ok Password.";
+                    resultTextBlock.Foreground = Brushes.Orange;
+                    break;
+                default:
+                    resultTextBlock.Text = "Weak Password.";
+                    resultTextBlock.Foreground = Brushes.Red;
+                    break;
+
+            }
+            if (passwordStrength <= 3)
+            {
+                StringBuilder suggestedPassword = new StringBuilder();
+                Random rng = new Random();
+                for (int i = 0; i < 5; i++)
+                {
+
+                    char randomLetter = (char)rng.Next('a', 'z' + 1);
+                    suggestedPassword.Append(randomLetter.ToString());
+                }
+                for (int j = 0; j < 2; j++)
+                {
+                    int randomNumbers = rng.Next(0, 10);
+                    suggestedPassword.Append(randomNumbers);
+                }
+                for (int k = 0; k < 2; k++)
+                {
+                    char randomCapitalLetter = (char)rng.Next('A', 'Z' + 1);
+                    suggestedPassword.Append(randomCapitalLetter);
+                }
+                int amountExcitement = rng.Next(1, 6);
+                do 
+                { 
+                    suggestedPassword.Append("!");
+                    amountExcitement--;
+
+                } while (amountExcitement > 1);
+
+                string shownPassword = suggestedPassword.ToString();
+                string shuffle = shownPassword.Substring(0, (rng.Next(0, shownPassword.Length)));
+                shownPassword.Insert(0, shuffle);
+
+                MessageBoxResult answer = MessageBox.Show($"Use suggested password? {shownPassword}", "Weak Password", MessageBoxButton.YesNo);
+                if (answer == MessageBoxResult.Yes)
+                {
+                    passwordTextBox.Text = shownPassword;
+                }
+                else
+                {
+
+                }
+            }
         }
     }
 }
